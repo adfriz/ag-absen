@@ -17,15 +17,14 @@
             <p class="text-slate-400 text-sm mt-1.5 font-medium">Silakan masuk ke akun Anda</p>
         </div>
 
-        <!-- MAIN GLASSMORPHIC CARD -->
+        <!-- MAIN CARD -->
         <div class="bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-[32px] p-8 shadow-2xl shadow-slate-950/80 relative overflow-hidden">
             <form wire:submit.prevent="authenticate" class="space-y-6">
                 {{ $this->form }}
 
                 <x-filament-panels::form.actions
                     :actions="$this->getCachedFormActions()"
-                    :full-width="$this->hasFullWidthFormActions()"
-                />
+                    :full-width="$this->hasFullWidthFormActions()" />
             </form>
         </div>
 

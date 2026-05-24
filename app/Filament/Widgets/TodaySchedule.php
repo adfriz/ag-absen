@@ -71,7 +71,7 @@ class TodaySchedule extends BaseWidget
 
         if ($this->isLibur) {
             $libur = HariLibur::where('tanggal', $this->selectedDate)->first();
-            return "🚨 HARI LIBUR NASIONAL/SEKOLAH: {$libur->nama} ({$libur->deskripsi})";
+            return "HARI LIBUR NASIONAL/SEKOLAH: {$libur->nama} ({$libur->deskripsi})";
         }
 
         if ($this->isToday) {
@@ -117,10 +117,10 @@ class TodaySchedule extends BaseWidget
                 'classroom',
                 'mataPelajaran',
                 'teacher',
-                'presensi' => function($q) {
+                'presensi' => function ($q) {
                     $q->where('tanggal', $this->selectedDate);
                 },
-                'substitusi' => function($q) {
+                'substitusi' => function ($q) {
                     $q->where('tanggal', $this->selectedDate);
                 }
             ]);
@@ -128,9 +128,9 @@ class TodaySchedule extends BaseWidget
         if ($izinSayaHariIni) {
             $query->whereIn('id', $substitusiIds);
         } else {
-            $query->where(function($q) use ($substitusiIds, $userId) {
+            $query->where(function ($q) use ($substitusiIds, $userId) {
                 $q->where('user_id', $userId)
-                  ->orWhereIn('id', $substitusiIds);
+                    ->orWhereIn('id', $substitusiIds);
             });
 
             $schedulesSubstitutedToOthers = SubstitusiJadwal::where('tanggal', $this->selectedDate)
@@ -165,7 +165,7 @@ class TodaySchedule extends BaseWidget
                             ->alignment('right')
                             ->weight('bold')
                             ->color('primary')
-                            ->state(fn ($record) => date('H:i', strtotime($record->jam_mulai)) . ' - ' . date('H:i', strtotime($record->jam_selesai))),
+                            ->state(fn($record) => date('H:i', strtotime($record->jam_mulai)) . ' - ' . date('H:i', strtotime($record->jam_selesai))),
                     ]),
 
                     Tables\Columns\TextColumn::make('teacher.name')
@@ -249,9 +249,8 @@ class TodaySchedule extends BaseWidget
                         if ($isToday && $sekarangTime < $record->jam_mulai) return true;
                         return false;
                     })
-                    ->icon(fn ($record) => $record->presensi->isNotEmpty() ? 'heroicon-m-pencil-square' : 'heroicon-m-play')
+                    ->icon(fn($record) => $record->presensi->isNotEmpty() ? 'heroicon-m-pencil-square' : 'heroicon-m-play')
                     ->button()
             ]);
     }
 }
-
