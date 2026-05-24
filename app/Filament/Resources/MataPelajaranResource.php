@@ -30,6 +30,8 @@ class MataPelajaranResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Mata Pelajaran';
 
+    protected static ?string $slug = 'mata-pelajaran';
+
     protected static ?string $navigationGroup = 'Data Master';
 
     public static function form(Form $form): Form

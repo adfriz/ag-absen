@@ -26,6 +26,8 @@ class JadwalSayaResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Jadwal Mengajar';
 
+    protected static ?string $slug = 'jadwal-saya';
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

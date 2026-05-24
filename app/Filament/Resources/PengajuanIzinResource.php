@@ -28,6 +28,8 @@ class PengajuanIzinResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Pengajuan Izin';
 
+    protected static ?string $slug = 'pengajuan-izin';
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('user_id', auth()->id());

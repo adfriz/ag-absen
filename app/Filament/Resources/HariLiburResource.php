@@ -30,6 +30,8 @@ class HariLiburResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Hari Libur';
 
+    protected static ?string $slug = 'hari-libur';
+
     protected static ?string $navigationGroup = 'Data Master';
 
     public static function form(Form $form): Form

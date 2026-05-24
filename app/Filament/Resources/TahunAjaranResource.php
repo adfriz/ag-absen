@@ -30,6 +30,8 @@ class TahunAjaranResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Tahun Ajaran';
 
+    protected static ?string $slug = 'tahun-ajaran';
+
     protected static ?string $navigationGroup = 'Data Master';
 
     public static function form(Form $form): Form

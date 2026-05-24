@@ -30,6 +30,8 @@ class JadwalResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Jadwal Pelajaran';
 
+    protected static ?string $slug = 'jadwal-pelajaran';
+
     protected static ?string $navigationGroup = 'Data Master';
 
     public static function form(Form $form): Form

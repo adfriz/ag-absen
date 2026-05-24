@@ -30,6 +30,8 @@ class IzinGuruResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Pengajuan Izin Guru';
 
+    protected static ?string $slug = 'izin-guru';
+
     protected static ?string $navigationGroup = 'Manajemen Kehadiran';
 
     public static function getNavigationBadge(): ?string

@@ -21,6 +21,8 @@ class TodaySchedule extends BaseWidget
         return auth()->user()->role === 'guru';
     }
 
+    protected static string $view = 'filament.widgets.today-schedule';
+
     public string $selectedDate;
 
     // Cached values — computed once, used everywhere
