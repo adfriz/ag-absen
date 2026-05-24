@@ -26,7 +26,6 @@ class AppPanelProvider extends PanelProvider
             ->default()
             ->id('app')
             ->path('dashboard')
-            ->login(\App\Filament\Pages\Auth\Login::class)
             ->font('system-ui', provider: \Filament\FontProviders\LocalFontProvider::class)
             ->colors([
                 'primary' => [
