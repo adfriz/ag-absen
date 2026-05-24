@@ -103,7 +103,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 flex items-center justify-center min-h-screen relative overflow-hidden" x-data="{ showLogin: false, role: 'guru' }">
+<body class="bg-slate-950 text-slate-100 flex items-center justify-center min-h-screen relative overflow-hidden">
     
     <!-- Background Glow Effects -->
     <div class="absolute w-[500px] h-[500px] bg-evergreen-600/10 rounded-full blur-[120px] -top-40 -left-40 pointer-events-none"></div>
@@ -123,96 +123,8 @@
         </div>
 
         <!-- MAIN GLASSMORPHIC CARD -->
-        <div class="bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-[32px] p-8 shadow-2xl shadow-slate-950/80 relative overflow-hidden min-h-[380px] flex flex-col justify-center">
-            
-            <!-- STATE A: ROLE SELECTION -->
-            <div x-show="!showLogin" 
-                 x-transition:enter="transition ease-out duration-300 transform"
-                 x-transition:enter-start="opacity-0 -translate-x-12"
-                 x-transition:enter-end="opacity-100 translate-x-0"
-                 x-transition:leave="transition ease-in duration-200 transform"
-                 x-transition:leave-start="opacity-100 translate-x-0"
-                 x-transition:leave-end="opacity-0 -translate-x-12"
-                 class="space-y-5"
-             >
-                <div class="pb-2">
-                    <h2 class="text-lg font-bold text-white uppercase tracking-wider text-center">Pilih Akses Masuk</h2>
-                    <p class="text-xs text-slate-400 text-center mt-1">Silakan pilih peran Anda untuk masuk ke system.</p>
-                </div>
-
-                <!-- BUTTON GURU -->
-                <button 
-                    @click="role = 'guru'; showLogin = true"
-                    class="w-full flex items-center gap-5 p-5 bg-gradient-to-r from-evergreen-950/40 to-slate-900/40 hover:from-evergreen-600 hover:to-evergreen-500 rounded-2xl border border-slate-800 hover:border-evergreen-400/50 shadow-md group transition-all duration-300 text-left active:scale-[0.98]"
-                >
-                    <div class="w-12 h-12 rounded-xl bg-evergreen-500/10 group-hover:bg-white/10 flex items-center justify-center text-evergreen-400 group-hover:text-white transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.57 50.57 0 0 0-2.658-.813A5.906 5.906 0 0 1 12 3.48a5.905 5.905 0 0 1 6.87 5.854 50.45 50.45 0 0 0-2.658.813M4.26 10.147a49.048 49.048 0 0 1 15.48 0m-15.48 0a50.562 50.562 0 0 1 15.48 0M12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM6.5 18a2.25 2.25 0 1 1 0-4.5 2.25 2.25 0 0 1 0 4.5ZM17.5 18a2.25 2.25 0 1 1 0-4.5 2.25 2.25 0 0 1 0 4.5Z" />
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-base font-black text-white group-hover:text-white transition-colors">Masuk sebagai Guru</p>
-                        <p class="text-xs text-slate-400 group-hover:text-white/80 mt-0.5 font-medium transition-colors">Input absensi & delegasi pengajaran</p>
-                    </div>
-                </button>
-
-                <!-- BUTTON ADMIN -->
-                <button 
-                    @click="role = 'admin'; showLogin = true"
-                    class="w-full flex items-center gap-5 p-5 bg-gradient-to-r from-slate-900/40 to-slate-950/40 hover:from-amber-600 hover:to-amber-500 rounded-2xl border border-slate-800 hover:border-amber-400/50 shadow-md group transition-all duration-300 text-left active:scale-[0.98]"
-                >
-                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 group-hover:bg-white/10 flex items-center justify-center text-amber-400 group-hover:text-white transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-base font-black text-white group-hover:text-white transition-colors">Masuk sebagai Admin</p>
-                        <p class="text-xs text-slate-400 group-hover:text-white/80 mt-0.5 font-medium transition-colors">Kelola data master & perizinan guru</p>
-                    </div>
-                </button>
-            </div>
-
-            <!-- STATE B: LOGIN FORM -->
-            <div x-show="showLogin" 
-                 x-cloak
-                 x-transition:enter="transition ease-out duration-300 transform"
-                 x-transition:enter-start="opacity-0 translate-x-12"
-                 x-transition:enter-end="opacity-100 translate-x-0"
-                 x-transition:leave="transition ease-in duration-200 transform"
-                 x-transition:leave-start="opacity-100 translate-x-0"
-                 x-transition:leave-end="opacity-0 translate-x-12"
-                 class="space-y-6"
-            >
-                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-                    <div>
-                        <h2 class="text-lg font-black text-white uppercase tracking-wider flex items-center gap-2">
-                            Login <span x-text="role === 'admin' ? 'Admin' : 'Guru'" class="text-evergreen-400"></span>
-                        </h2>
-                        <p class="text-xs text-slate-400 mt-0.5">Masukkan kredensial akun Anda.</p>
-                    </div>
-                    
-                    <!-- BUTTON BACK -->
-                    <button 
-                        @click="showLogin = false"
-                        class="flex items-center gap-1 text-[11px] font-bold text-slate-400 hover:text-white bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700/60 transition-colors"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-                        </svg>
-                        Kembali
-                    </button>
-                </div>
-
-                <!-- MOUNT LIVEWIRE LOGIN DYNAMICALLY -->
-                <div x-show="role === 'guru'">
-                    @livewire('portal-login', ['role' => 'guru'], key('login-guru'))
-                </div>
-                <div x-show="role === 'admin'">
-                    @livewire('portal-login', ['role' => 'admin'], key('login-admin'))
-                </div>
-            </div>
-
+        <div class="bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-[32px] p-8 shadow-2xl shadow-slate-950/80 relative overflow-hidden min-h-[300px] flex flex-col justify-center">
+            @livewire('portal-login')
         </div>
 
         <p class="text-center text-xs text-slate-500 mt-8 font-medium">© 2026 Al Ghazaly School Attendance System</p>

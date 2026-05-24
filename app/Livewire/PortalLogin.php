@@ -17,11 +17,8 @@ class PortalLogin extends Component implements HasForms
 
     public ?array $data = [];
     
-    public string $role = 'guru'; // Default role
-
-    public function mount(string $role = 'guru'): void
+    public function mount(): void
     {
-        $this->role = $role;
         $this->form->fill();
     }
 
@@ -46,22 +43,9 @@ class PortalLogin extends Component implements HasForms
         $data = $this->form->getState();
 
         if (Auth::attempt(['username' => $data['username'], 'password' => $data['password']])) {
-            $user = Auth::user();
-            
-            // Cek apakah role sesuai dengan pintu masuknya
-            if ($user->role !== $this->role && $user->role !== 'admin') {
-                Auth::logout();
-                Notification::make()
-                    ->title('Akses Ditolak')
-                    ->body('Akun Anda tidak memiliki akses untuk peran ini.')
-                    ->danger()
-                    ->send();
-                return;
-            }
-
             request()->session()->regenerate();
 
-            return redirect()->intended($this->role === 'admin' ? '/admin' : '/guru');
+            return redirect()->intended('/dashboard');
         }
 
         Notification::make()

@@ -1,10 +1,10 @@
 <x-filament::section>
     <x-slot name="heading">
-        Login {{ ucfirst($role) }}
+        Masuk ke Sistem
     </x-slot>
     
     <x-slot name="description">
-        Masukkan kredensial Anda untuk melanjutkan.
+        Masukkan username dan password Anda.
     </x-slot>
 
     <form wire:submit.prevent="authenticate" class="space-y-6">
