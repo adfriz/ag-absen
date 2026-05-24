@@ -15,6 +15,7 @@ class ManageHariLiburs extends ManageRecords
     {
         return [
             Actions\CreateAction::make()
+                ->label('Tambah Hari Libur')
                 ->using(function (array $data, string $model): Model {
                     $start = \Carbon\Carbon::parse($data['tanggal_mulai']);
                     $end = isset($data['tanggal_selesai']) ? \Carbon\Carbon::parse($data['tanggal_selesai']) : $start;

@@ -56,6 +56,7 @@ class IzinGuruResource extends Resource
                                     ->relationship('teacher', 'name', fn ($query) => $query->where('role', 'guru'))
                                     ->disabled(fn (string $context): bool => $context === 'edit')
                                     ->required()
+                                    ->live()
                                     ->label('Guru Yang Mengajukan'),
                                 Forms\Components\Select::make('jenis_izin')
                                     ->options([
@@ -111,8 +112,8 @@ class IzinGuruResource extends Resource
                             ->schema([
                                 Forms\Components\Select::make('jadwal_id')
                                     ->label('Jadwal Asli')
-                                    ->options(function (Forms\Get $get, ?IzinGuru $record) {
-                                        $userId = $record?->user_id;
+                                    ->options(function (Forms\Get $get) {
+                                        $userId = $get('../../user_id');
                                         if (!$userId) return [];
                                         return \App\Models\Jadwal::where('user_id', $userId)
                                             ->with(['classroom', 'mataPelajaran'])

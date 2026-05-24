@@ -13,7 +13,8 @@ class ManageMataPelajarans extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Mata Pelajaran'),
         ];
     }
 }

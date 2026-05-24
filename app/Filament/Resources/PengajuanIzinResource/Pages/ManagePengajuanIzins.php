@@ -14,6 +14,7 @@ class ManagePengajuanIzins extends ManageRecords
     {
         return [
             Actions\CreateAction::make()
+                ->label('Buat Pengajuan')
                 ->mutateFormDataUsing(function (array $data): array {
                     $data['user_id'] = auth()->id();
                     $data['status'] = 'Pending';

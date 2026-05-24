@@ -21,7 +21,8 @@ class ManageSiswas extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Siswa'),
             Actions\Action::make('import')
                 ->label('Import Data Siswa')
                 ->icon('heroicon-o-arrow-up-tray')
@@ -39,12 +40,12 @@ class ManageSiswas extends ManageRecords
                         ->required(),
                 ])
                 ->action(function (array $data) {
-                    $file = Storage::disk('local')->path($data['file']);
-                    
+                    $file = storage_path('app/' . $data['file']);
+
                     $rows = SimpleExcelReader::create($file)->getRows();
                     $skipped = 0;
                     $imported = 0;
-                    
+
                     $tahunAktif = TahunAjaran::where('apakah_aktif', true)->first();
                     if (!$tahunAktif) {
                         Notification::make()
@@ -57,32 +58,32 @@ class ManageSiswas extends ManageRecords
                     $rows->each(function (array $rowProperties) use (&$skipped, &$imported, $data, $tahunAktif) {
                         // Dukungan huruf besar/kecil pada header Excel
                         $row = array_change_key_case($rowProperties, CASE_LOWER);
-                        
+
                         $nisn = $row['nisn'] ?? null;
                         if (!$nisn) return; // Lewati jika tidak ada NISN
-                        
+
                         // Cek duplikat NISN
                         if (Siswa::where('nisn', $nisn)->exists()) {
                             $skipped++;
                             return;
                         }
-                        
+
                         $siswa = Siswa::create([
                             'nisn' => $nisn,
                             'nama' => $row['nama'] ?? '-',
                             'jenis_kelamin' => isset($row['jenis_kelamin']) ? strtoupper(trim($row['jenis_kelamin'])) : null,
                         ]);
-                        
+
                         $nomorAbsen = $row['nomor_absen'] ?? null;
-                        
+
                         $siswa->kelas()->attach($data['kelas_id'], [
                             'tahun_ajaran_id' => $tahunAktif->id,
                             'nomor_absen' => $nomorAbsen,
                         ]);
-                        
+
                         $imported++;
                     });
-                    
+
                     if ($skipped > 0) {
                         Notification::make()
                             ->title("Berhasil: $imported siswa. Dilewati: $skipped siswa (NISN duplikat).")
