@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Teacher\Pages;
+namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use App\Models\Jadwal;
@@ -17,9 +17,14 @@ class IsiPresensi extends Page
 {
     use WithFileUploads;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'guru';
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static string $view = 'filament.teacher.pages.isi-presensi';
+    protected static string $view = 'filament.pages.isi-presensi';
 
     // Sembunyikan dari sidebar karena diakses lewat link widget
     protected static bool $shouldRegisterNavigation = false;
@@ -210,6 +215,6 @@ class IsiPresensi extends Page
             ->success()
             ->send();
 
-        return redirect('/guru');
+        return redirect('/dashboard');
     }
 }

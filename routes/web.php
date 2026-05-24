@@ -18,10 +18,3 @@ Route::get('/', function () {
     return view('portal');
 });
 
-
-
-Route::get('/dashboard', function () {
-    return redirect(auth()->user()->role === 'admin' ? '/admin' : '/guru');
-})->middleware(['auth'])->name('dashboard');
-
-

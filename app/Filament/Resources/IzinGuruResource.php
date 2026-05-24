@@ -15,6 +15,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class IzinGuruResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
+
     protected static ?string $model = IzinGuru::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';

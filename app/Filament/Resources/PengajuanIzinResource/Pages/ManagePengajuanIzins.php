@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Teacher\Resources\PengajuanIzinResource\Pages;
+namespace App\Filament\Resources\PengajuanIzinResource\Pages;
 
-use App\Filament\Teacher\Resources\PengajuanIzinResource;
+use App\Filament\Resources\PengajuanIzinResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ManageRecords;
 

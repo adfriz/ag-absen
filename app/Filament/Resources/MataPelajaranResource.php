@@ -15,6 +15,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class MataPelajaranResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
+
     protected static ?string $model = MataPelajaran::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';

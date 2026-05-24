@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Teacher\Widgets;
+namespace App\Filament\Widgets;
 
 use App\Models\Jadwal;
 use App\Models\SubstitusiJadwal;
@@ -16,6 +16,11 @@ use Carbon\Carbon;
 
 class TodaySchedule extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        return auth()->user()->role === 'guru';
+    }
+
     public string $selectedDate;
 
     // Cached values — computed once, used everywhere
@@ -235,7 +240,7 @@ class TodaySchedule extends BaseWidget
                         return $sudahDiabsen ? 'info' : 'success';
                     })
                     ->url(function ($record) use ($selectedDate) {
-                        return route('filament.teacher.pages.attendance.{jadwal}', ['jadwal' => $record->id, 'tanggal' => $selectedDate]);
+                        return route('filament.app.pages.attendance.{jadwal}', ['jadwal' => $record->id, 'tanggal' => $selectedDate]);
                     })
                     ->disabled(function ($record) use ($isLibur, $isFuture, $isToday, $sekarangTime) {
                         if ($isLibur || $isFuture) return true;

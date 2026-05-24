@@ -15,6 +15,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TahunAjaranResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
+
     protected static ?string $model = TahunAjaran::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';

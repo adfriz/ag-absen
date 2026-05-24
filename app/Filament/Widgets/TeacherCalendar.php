@@ -1,13 +1,18 @@
 <?php
 
-namespace App\Filament\Teacher\Widgets;
+namespace App\Filament\Widgets;
 
 use Filament\Widgets\Widget;
 use Carbon\Carbon;
 
 class TeacherCalendar extends Widget
 {
-    protected static string $view = 'filament.teacher.widgets.teacher-calendar';
+    public static function canView(): bool
+    {
+        return auth()->user()->role === 'guru';
+    }
+
+    protected static string $view = 'filament.widgets.teacher-calendar';
 
     protected int | string | array $columnSpan = [
         'md' => 1,

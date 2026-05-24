@@ -15,6 +15,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class HariLiburResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
+
     protected static ?string $model = HariLibur::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-flag';

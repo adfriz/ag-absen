@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Teacher\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\Teacher\Resources\PengajuanIzinResource\Pages;
+use App\Filament\Resources\PengajuanIzinResource\Pages;
 use App\Models\IzinGuru;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -13,6 +13,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PengajuanIzinResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'guru';
+    }
+
     protected static ?string $model = IzinGuru::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';

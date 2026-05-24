@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Teacher\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\Teacher\Resources\JadwalSayaResource\Pages;
+use App\Filament\Resources\JadwalSayaResource\Pages;
 use App\Models\Jadwal;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -11,6 +11,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class JadwalSayaResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'guru';
+    }
+
     protected static ?string $model = Jadwal::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';

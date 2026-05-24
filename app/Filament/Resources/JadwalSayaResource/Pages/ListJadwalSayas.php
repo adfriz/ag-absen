@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Teacher\Resources\JadwalSayaResource\Pages;
+namespace App\Filament\Resources\JadwalSayaResource\Pages;
 
-use App\Filament\Teacher\Resources\JadwalSayaResource;
+use App\Filament\Resources\JadwalSayaResource;
 use Filament\Resources\Pages\ListRecords;
 
 class ListJadwalSayas extends ListRecords

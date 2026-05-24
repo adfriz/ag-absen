@@ -162,7 +162,7 @@
                     color="gray" 
                     outlined
                     tag="a"
-                    href="/guru"
+                    href="/dashboard"
                 >
                     Kembali
                 </x-filament::button>
