@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --evergreen-50: 236, 251, 233;
+    --evergreen-100: 217, 248, 211;
+    --evergreen-200: 180, 240, 168;
+    --evergreen-300: 142, 233, 124;
+    --evergreen-400: 105, 225, 81;
+    --evergreen-500: 67, 218, 37;
+    --evergreen-600: 54, 174, 30;
+    --evergreen-700: 40, 131, 22;
+    --evergreen-800: 27, 87, 15;
+    --evergreen-900: 13, 44, 7;
+    --evergreen-950: 9, 31, 5;
+
+    --primary-50: 236, 251, 233;
+    --primary-100: 217, 248, 211;
+    --primary-200: 180, 240, 168;
+    --primary-300: 142, 233, 124;
+    --primary-400: 105, 225, 81;
+    --primary-500: 67, 218, 37;
+    --primary-600: 54, 174, 30;
+    --primary-700: 40, 131, 22;
+    --primary-800: 27, 87, 15;
+    --primary-900: 13, 44, 7;
+    --primary-950: 9, 31, 5;
+}
+
+.dark {
+    --evergreen-50: 241, 252, 246;
+    --evergreen-100: 225, 247, 235;
+    --evergreen-200: 195, 238, 214;
+    --evergreen-300: 150, 224, 183;
+    --evergreen-400: 100, 203, 147;
+    --evergreen-500: 61, 177, 117;
+    --evergreen-600: 45, 145, 93;
+    --evergreen-700: 38, 116, 76;
+    --evergreen-800: 32, 92, 63;
+    --evergreen-900: 27, 76, 53;
+    --evergreen-950: 15, 42, 29;
+
+    --primary-50: 241, 252, 246;
+    --primary-100: 225, 247, 235;
+    --primary-200: 195, 238, 214;
+    --primary-300: 150, 224, 183;
+    --primary-400: 100, 203, 147;
+    --primary-500: 61, 177, 117;
+    --primary-600: 45, 145, 93;
+    --primary-700: 38, 116, 76;
+    --primary-800: 32, 92, 63;
+    --primary-900: 27, 76, 53;
+    --primary-950: 15, 42, 29;
+}
