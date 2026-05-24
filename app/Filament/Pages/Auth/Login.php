@@ -9,6 +9,8 @@ use Illuminate\Validation\ValidationException;
 
 class Login extends BaseLogin
 {
+    protected static string $view = 'filament.pages.auth.login';
+
     public function form(\Filament\Forms\Form $form): \Filament\Forms\Form
     {
         return $form
