@@ -12,8 +12,9 @@ export default defineConfig({
         }),
     ],
     server: {
+        host: true,
         hmr: {
-            host: 'localhost',
+            host: 'alghazaly-absensi.test',
         },
     },
 });
