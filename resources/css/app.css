@@ -53,3 +53,68 @@
     --primary-900: 27, 76, 53;
     --primary-950: 15, 42, 29;
 }
+
+/* Custom styles for the login page and form elements */
+/* Light Mode Gradient (Smooth transition) */
+.custom-login-page {
+    background-color: #ffffff !important;
+    background-image: linear-gradient(90deg, rgba(73, 199, 0, 1) 0%, rgba(73, 199, 0, 0.7) 12%, rgba(73, 199, 0, 0.3) 25%, rgba(73, 199, 0, 0) 35%, rgba(73, 199, 0, 0) 65%, rgba(73, 199, 0, 0.3) 75%, rgba(73, 199, 0, 0.7) 88%, rgba(73, 199, 0, 1) 100%) !important;
+}
+
+/* Dark Mode Gradient (Soft Pastel Green Glow) */
+.dark.custom-login-page,
+.dark .custom-login-page {
+    background-color: #020617 !important;
+    background-image: linear-gradient(90deg, rgba(134, 239, 172, 0.35) 0%, rgba(134, 239, 172, 0.2) 12%, rgba(134, 239, 172, 0.05) 25%, rgba(134, 239, 172, 0) 35%, rgba(134, 239, 172, 0) 65%, rgba(134, 239, 172, 0.05) 75%, rgba(134, 239, 172, 0.2) 88%, rgba(134, 239, 172, 0.35) 100%) !important;
+}
+
+.custom-login-page .fi-input-wrp {
+    background-color: rgba(2, 6, 23, 0.4) !important;
+    border-color: rgba(51, 65, 85, 0.5) !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.custom-login-page .fi-input-wrp:focus-within {
+    border-color: rgb(16, 185, 129) !important;
+    box-shadow: 0 0 0 1px rgb(16, 185, 129) !important;
+    background-color: rgba(2, 6, 23, 0.6) !important;
+}
+.custom-login-page .fi-input {
+    color: #f1f5f9 !important;
+    font-size: 0.875rem !important;
+}
+.custom-login-page .fi-fo-field-wrp-label label {
+    color: #94a3b8 !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.025em !important;
+}
+.custom-login-page .fi-checkbox {
+    border-radius: 6px !important;
+    border-color: rgba(51, 65, 85, 0.6) !important;
+    background-color: rgba(2, 6, 23, 0.4) !important;
+    color: rgb(16, 185, 129) !important;
+}
+.custom-login-page .fi-checkbox:focus {
+    --tw-ring-color: rgb(16, 185, 129) !important;
+}
+.custom-login-page .fi-btn {
+    border-radius: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.025em !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.custom-login-page .fi-btn-color-primary {
+    background: linear-gradient(135deg, #10b981, #06b6d4) !important;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25) !important;
+    color: #ffffff !important;
+}
+.custom-login-page .fi-btn-color-primary:hover {
+    opacity: 0.95 !important;
+    transform: translateY(-1.5px) !important;
+    box-shadow: 0 6px 18px rgba(6, 182, 212, 0.35) !important;
+}
+.custom-login-page .fi-btn-color-primary:active {
+    transform: translateY(0) !important;
+}
