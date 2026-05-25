@@ -35,9 +35,27 @@ class Login extends BaseLogin
             'forgotUsername.exists' => 'Username / NIP tidak terdaftar.',
         ]);
 
-        $user = User::where('username', $this->forgotUsername)->first();
+        $user = User::query()->where('username', $this->forgotUsername)->first();
         if ($user) {
             $user->update(['needs_password_reset' => true]);
+
+            // Send notification to admins
+            $admins = User::query()->where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                \Filament\Notifications\Notification::make()
+                    ->title('Permintaan Reset Password')
+                    ->body("Guru {$user->name} meminta reset password.")
+                    ->icon('heroicon-o-key')
+                    ->iconColor('danger')
+                    ->actions([
+                        \Filament\Notifications\Actions\Action::make('view')
+                            ->button()
+                            ->label('Lihat Permintaan')
+                            ->url('/dashboard'),
+                    ])
+                    ->sendToDatabase($admin);
+            }
+
             $this->resetSuccess = true;
             $this->forgotUsername = null;
         }

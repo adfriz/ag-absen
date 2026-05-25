@@ -26,6 +26,7 @@ class AppPanelProvider extends PanelProvider
             ->default()
             ->id('app')
             ->path('dashboard')
+            ->databaseNotifications()
             ->font('system-ui', provider: \Filament\FontProviders\LocalFontProvider::class)
             ->colors([
                 'primary' => [

@@ -13,6 +13,29 @@ class IzinGuru extends Model
 
     protected $table = 'izin_guru';
 
+    protected static function booted(): void
+    {
+        static::created(function (self $izinGuru) {
+            $teacherName = $izinGuru->teacher?->name ?? 'Guru';
+            $admins = \App\Models\User::query()->where('role', 'admin')->get();
+
+            foreach ($admins as $admin) {
+                \Filament\Notifications\Notification::make()
+                    ->title('Pengajuan Izin Baru')
+                    ->body("{$teacherName} mengajukan izin {$izinGuru->jenis_izin} - {$izinGuru->alasan}")
+                    ->icon('heroicon-o-document-text')
+                    ->iconColor('warning')
+                    ->actions([
+                        \Filament\Notifications\Actions\Action::make('view')
+                            ->button()
+                            ->label('Lihat Detail')
+                            ->url('/dashboard/izin-guru'),
+                    ])
+                    ->sendToDatabase($admin);
+            }
+        });
+    }
+
     protected $fillable = [
         'user_id',
         'tanggal_mulai',
