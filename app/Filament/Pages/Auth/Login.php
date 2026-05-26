@@ -104,6 +104,13 @@ class Login extends BaseLogin
         ]);
     }
 
+    protected function getAuthenticateFormAction(): \Filament\Actions\Action
+    {
+        return parent::getAuthenticateFormAction()
+            ->label('Masuk');
+    }
+
+
     public function render(): \Illuminate\Contracts\View\View
     {
         /** @var mixed $view */

@@ -24,7 +24,7 @@ class Kelas extends Model
     public function siswa(): BelongsToMany
     {
         return $this->belongsToMany(Siswa::class, 'kelas_siswa', 'kelas_id', 'siswa_id')
-            ->withPivot('tahun_ajaran_id')
+            ->withPivot(['tahun_ajaran_id', 'nomor_absen'])
             ->withTimestamps();
     }
 

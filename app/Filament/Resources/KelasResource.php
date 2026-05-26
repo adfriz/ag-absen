@@ -69,6 +69,19 @@ class KelasResource extends Resource
                 //
             ])
             ->actions([
+                // Tambahan Aksi untuk Melihat Daftar Siswa Lengkap dan Bisa Diedit
+                Tables\Actions\Action::make('lihat_siswa')
+                    ->label('Lihat Siswa')
+                    ->icon('heroicon-o-users')
+                    ->color('info')
+                    ->url(fn(Kelas $record): string => \App\Filament\Resources\SiswaResource::getUrl('index', [
+                        'tableFilters' => [
+                            'kelas' => [
+                                'value' => $record->id,
+                            ],
+                        ],
+                    ])),
+
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

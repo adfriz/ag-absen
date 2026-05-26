@@ -59,7 +59,7 @@
         <!-- HEADER LOGO -->
         <div class="text-center mb-8">
             <img src="{{ asset('img/Logo.svg')}}" class="w-48 h-48 mx-auto mb-5" alt="Logo">
-            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Sistem Absensi Al Ghazaly</h1>
+            <h1 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Sistem Absensi Al Ghazaly</h1>
             <p class="text-slate-600 dark:text-slate-400 text-sm mt-1.5 font-medium">Silakan masuk ke akun Anda</p>
         </div>
 

@@ -75,46 +75,55 @@
     box-shadow: none !important;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
+
 .dark .custom-login-page .fi-input-wrp:focus-within {
     border-color: rgb(96, 215, 82) !important;
     box-shadow: 0 0 0 1px rgb(96, 215, 82) !important;
     background-color: rgba(2, 6, 23, 0.6) !important;
 }
+
 .dark .custom-login-page .fi-input {
     color: #f1f5f9 !important;
     font-size: 0.875rem !important;
 }
+
 .dark .custom-login-page .fi-fo-field-wrp-label label {
     color: #94a3b8 !important;
     font-size: 0.75rem !important;
     font-weight: 600 !important;
     letter-spacing: 0.025em !important;
 }
+
 .dark .custom-login-page .fi-checkbox {
     border-radius: 6px !important;
     border-color: rgba(51, 65, 85, 0.6) !important;
     background-color: rgba(2, 6, 23, 0.4) !important;
     color: rgb(96, 215, 82) !important;
 }
+
 .dark .custom-login-page .fi-checkbox:focus {
     --tw-ring-color: rgb(96, 215, 82) !important;
 }
+
 .custom-login-page .fi-btn {
     border-radius: 14px !important;
     font-weight: 700 !important;
     letter-spacing: 0.025em !important;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
+
 .custom-login-page .fi-btn-color-primary {
-    background: linear-gradient(135deg, #60D752, #06b6d4) !important;
+    background: rgb(34, 197, 94) !important;
     box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25) !important;
     color: #ffffff !important;
 }
+
 .custom-login-page .fi-btn-color-primary:hover {
     opacity: 0.95 !important;
     transform: translateY(-1.5px) !important;
     box-shadow: 0 6px 18px rgba(6, 182, 212, 0.35) !important;
 }
+
 .custom-login-page .fi-btn-color-primary:active {
     transform: translateY(0) !important;
 }

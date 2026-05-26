@@ -42,7 +42,7 @@ class SiswaResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('nisn')
                             ->required()
-                            ->unique(ignorable: fn ($record) => $record)
+                            ->unique(ignorable: fn($record) => $record)
                             ->label('NISN'),
                         Forms\Components\TextInput::make('nama')
                             ->required()
@@ -119,10 +119,18 @@ class SiswaResource extends Resource
                         return $kelas ? $kelas->nama : 'Belum Ada Kelas';
                     })
                     ->badge()
-                    ->color(fn ($state) => $state === 'Belum Ada Kelas' ? 'gray' : 'primary'),
+                    ->color(fn($state) => $state === 'Belum Ada Kelas' ? 'gray' : 'primary'),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('kelas')
+                    ->label('Filter Kelas')
+                    ->relationship('kelas', 'nama', function ($query) {
+                        // Pastikan hanya memfilter kelas di tahun ajaran yang sedang aktif
+                        $tahunAktif = \App\Models\TahunAjaran::where('apakah_aktif', true)->first();
+                        if ($tahunAktif) {
+                            $query->where('kelas_siswa.tahun_ajaran_id', $tahunAktif->id);
+                        }
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
