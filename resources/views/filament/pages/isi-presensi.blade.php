@@ -31,11 +31,30 @@
         <x-slot name="heading">Daftar Kehadiran Siswa</x-slot>
         <x-slot name="description">Klik status kehadiran untuk setiap siswa, lalu simpan.</x-slot>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+        @php
+            $statuses = [
+                'H' => ['color' => 'success'],
+                'S' => ['color' => 'warning'],
+                'I' => ['color' => 'info'],
+                'A' => ['color' => 'danger'],
+                'D' => ['color' => 'gray'],
+                'T' => ['color' => 'warning'],
+            ];
+            $labels = ['H' => 'Hadir', 'S' => 'Sakit', 'I' => 'Izin', 'A' => 'Alpa', 'D' => 'Dispensasi', 'T' => 'Terlambat'];
+        @endphp
+
+        <!-- Desktop Layout (Table with Fixed Widths) -->
+        <div class="hidden md:block overflow-x-auto">
+            <table class="w-full text-left border-collapse table-fixed">
+                <colgroup>
+                    <col class="w-[60px]">
+                    <col class="w-[35%]">
+                    <col class="w-[320px]">
+                    <col class="">
+                </colgroup>
                 <thead>
                     <tr class="border-b border-gray-200 dark:border-gray-800 text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                        <th class="py-3 px-4 w-10">No</th>
+                        <th class="py-3 px-4">No</th>
                         <th class="py-3 px-4">Siswa</th>
                         <th class="py-3 px-4 text-center">Status Kehadiran</th>
                         <th class="py-3 px-4">Detail Tambahan</th>
@@ -58,16 +77,6 @@
                             </td>
                             <td class="py-4 px-4">
                                 <div class="flex justify-center gap-1">
-                                    @php
-                                        $statuses = [
-                                            'H' => ['color' => 'success'],
-                                            'S' => ['color' => 'warning'],
-                                            'I' => ['color' => 'info'],
-                                            'A' => ['color' => 'danger'],
-                                            'D' => ['color' => 'gray'],
-                                            'T' => ['color' => 'warning'],
-                                        ];
-                                    @endphp
                                     @foreach($statuses as $val => $style)
                                         @php
                                             $active = $data['status'] === $val;
@@ -85,9 +94,6 @@
                                     @endforeach
                                 </div>
                                 <div class="text-center mt-1 text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider">
-                                    @php
-                                        $labels = ['H' => 'Hadir', 'S' => 'Sakit', 'I' => 'Izin', 'A' => 'Alpa', 'D' => 'Dispensasi', 'T' => 'Terlambat'];
-                                    @endphp
                                     {{ $labels[$data['status']] }}
                                 </div>
                             </td>
@@ -137,7 +143,7 @@
                                                 <input 
                                                     type="file" 
                                                     wire:model="buktiSuratUpload.{{ $siswaId }}"
-                                                    class="block w-full text-[10px] text-gray-400"
+                                                    class="block w-full text-[10px] text-gray-450 dark:text-gray-400"
                                                 >
                                                 <div wire:loading wire:target="buktiSuratUpload.{{ $siswaId }}" class="text-[10px] text-primary-500 font-bold">
                                                     Mengunggah...
@@ -151,6 +157,115 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Layout (Cards) -->
+        <div class="md:hidden space-y-4">
+            @foreach($siswaData as $siswaId => $data)
+                <div class="p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-850 rounded-2xl shadow-sm space-y-4">
+                    <!-- Top Info -->
+                    <div class="flex justify-between items-start gap-2">
+                        <div>
+                            <div class="flex items-baseline gap-1.5">
+                                <span class="text-xs text-gray-400 font-mono font-bold">#{{ $loop->iteration }}</span>
+                                <h4 class="font-bold text-gray-900 dark:text-white text-base leading-tight">{{ $data['nama'] }}</h4>
+                            </div>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 font-mono mt-0.5">NISN: {{ $data['nisn'] }}</p>
+                        </div>
+                        @if($data['is_locked'])
+                            <span class="inline-flex items-center text-[9px] bg-danger-500/10 text-danger-600 dark:text-danger-400 border border-danger-500/20 px-2 py-0.5 rounded-full font-bold uppercase shrink-0">
+                                Terkunci
+                            </span>
+                        @endif
+                    </div>
+
+                    <!-- Status Selection -->
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block">Status Kehadiran</label>
+                        <div class="flex flex-wrap gap-1.5">
+                            @foreach($statuses as $val => $style)
+                                @php
+                                    $active = $data['status'] === $val;
+                                @endphp
+                                <button 
+                                    type="button"
+                                    wire:click="$set('siswaData.{{ $siswaId }}.status', '{{ $val }}')"
+                                    @disabled($data['is_locked'] || $hariIniLibur || $belumWaktunya)
+                                    @class([
+                                        'px-3 py-1.5 text-xs font-bold rounded-lg border transition-all duration-150',
+                                        'bg-' . $style['color'] . '-500 text-white border-transparent shadow-sm' => $active,
+                                        'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-750' => !$active,
+                                        'opacity-50 cursor-not-allowed' => $data['is_locked'] || $hariIniLibur || $belumWaktunya,
+                                    ])
+                                >
+                                    {{ $val }}
+                                </button>
+                            @endforeach
+                        </div>
+                        <div class="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider">
+                            {{ $labels[$data['status']] }}
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Details Form -->
+                    @if(in_array($data['status'], ['D', 'T', 'S', 'I']))
+                        <div class="pt-3 border-t border-gray-100 dark:border-gray-800 space-y-3">
+                            @if($data['status'] === 'D')
+                                <div class="space-y-1">
+                                    <label class="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase block">Keterangan Dispensasi (Wajib)</label>
+                                    <x-filament::input 
+                                        type="text" 
+                                        wire:model.defer="siswaData.{{ $siswaId }}.catatan"
+                                        placeholder="Siswa bertugas..."
+                                        :disabled="$data['is_locked'] || $hariIniLibur || $belumWaktunya"
+                                        class="w-full"
+                                    />
+                                </div>
+                            @endif
+
+                            @if($data['status'] === 'T')
+                                <div class="space-y-1">
+                                    <label class="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase block">Menit Terlambat (Wajib)</label>
+                                    <div class="flex items-center gap-1.5">
+                                        <x-filament::input 
+                                            type="number" 
+                                            wire:model.defer="siswaData.{{ $siswaId }}.menit_terlambat"
+                                            placeholder="Contoh: 20"
+                                            :disabled="$data['is_locked'] || $hariIniLibur || $belumWaktunya"
+                                            class="w-20"
+                                        />
+                                        <span class="text-xs text-gray-400">menit</span>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if(in_array($data['status'], ['S', 'I']))
+                                <div class="space-y-1">
+                                    <label class="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase block">Bukti Surat</label>
+                                    @if($data['bukti_surat_existing'])
+                                        <div class="flex items-center gap-1 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-1.5 rounded-lg text-xs mb-1">
+                                            <a href="{{ \Illuminate\Support\Facades\Storage::url($data['bukti_surat_existing']) }}" target="_blank" class="hover:underline font-bold text-primary-600 dark:text-primary-400 truncate max-w-[200px]">
+                                                Lihat Surat Terunggah
+                                            </a>
+                                        </div>
+                                    @endif
+
+                                    @if(!$data['is_locked'] && !$hariIniLibur && !$belumWaktunya)
+                                        <input 
+                                            type="file" 
+                                            wire:model="buktiSuratUpload.{{ $siswaId }}"
+                                            class="block w-full text-[10px] text-gray-450 dark:text-gray-400"
+                                        >
+                                        <div wire:loading wire:target="buktiSuratUpload.{{ $siswaId }}" class="text-[10px] text-primary-500 font-bold">
+                                            Mengunggah...
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            @endforeach
         </div>
 
         <div class="pt-4 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6">

@@ -26,6 +26,8 @@ class AppPanelProvider extends PanelProvider
             ->default()
             ->id('app')
             ->path('dashboard')
+            ->brandLogo(asset('img/logo.svg'))
+            ->brandLogoHeight('2.5rem')
             ->databaseNotifications()
             ->font('system-ui', provider: \Filament\FontProviders\LocalFontProvider::class)
             ->colors([
