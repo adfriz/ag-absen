@@ -37,7 +37,7 @@
                 'S' => ['color' => 'warning'],
                 'I' => ['color' => 'info'],
                 'A' => ['color' => 'danger'],
-                'D' => ['color' => 'gray'],
+                'D' => ['color' => 'primary'],
                 'T' => ['color' => 'warning'],
             ];
             $labels = ['H' => 'Hadir', 'S' => 'Sakit', 'I' => 'Izin', 'A' => 'Alpa', 'D' => 'Dispensasi', 'T' => 'Terlambat'];

@@ -192,11 +192,22 @@ class TodaySchedule extends BaseWidget
 
                             $presensiList = $record->presensi;
                             if ($presensiList->isNotEmpty()) {
-                                $h = $presensiList->where('status', 'H')->count();
+                                $h = $presensiList->whereIn('status', ['H', 'T', 'D'])->count();
+                                $t = $presensiList->where('status', 'T')->count();
+                                $d = $presensiList->where('status', 'D')->count();
                                 $s = $presensiList->where('status', 'S')->count();
                                 $i = $presensiList->where('status', 'I')->count();
                                 $a = $presensiList->where('status', 'A')->count();
-                                return "Hadir: {$h} | Sakit: {$s} | Izin: {$i} | Alpa: {$a}";
+
+                                $hadirText = "Hadir: {$h}";
+                                if ($t > 0 || $d > 0) {
+                                    $details = [];
+                                    if ($t > 0) $details[] = "T: {$t}";
+                                    if ($d > 0) $details[] = "D: {$d}";
+                                    $hadirText .= " (" . implode(', ', $details) . ")";
+                                }
+
+                                return "{$hadirText} | Sakit: {$s} | Izin: {$i} | Alpa: {$a}";
                             }
 
                             return $isPast ? 'Tidak Diisi' : 'Belum Diisi';

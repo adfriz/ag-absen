@@ -111,7 +111,18 @@ class SiswaResource extends Resource
                         $kelas = $record->kelasAktif();
                         return $kelas ? $kelas->pivot->nomor_absen : '-';
                     })
-                    ->sortable(),
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        $tahunAktif = \App\Models\TahunAjaran::where('apakah_aktif', true)->first();
+                        $tahunAktifId = $tahunAktif ? $tahunAktif->id : 0;
+                        return $query->orderBy(
+                            \Illuminate\Support\Facades\DB::table('kelas_siswa')
+                                ->select('nomor_absen')
+                                ->whereColumn('kelas_siswa.siswa_id', 'siswa.id')
+                                ->where('kelas_siswa.tahun_ajaran_id', $tahunAktifId)
+                                ->limit(1),
+                            $direction
+                        );
+                    }),
                 Tables\Columns\TextColumn::make('kelas_aktif')
                     ->label('Kelas (Aktif)')
                     ->state(function (Siswa $record) {
