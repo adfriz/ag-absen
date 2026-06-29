@@ -122,3 +122,130 @@ Langkah-langkah untuk menjalankan proyek ini secara lokal:
    * **Guru 1 (Ahmad)**: `ahmad@alghazaly.com` (password: `password`)
    * **Guru 2 (Budi)**: `budi@alghazaly.com` (password: `password`)
    * **Guru 3 (Citra)**: `citra@alghazaly.com` (password: `password`)
+
+---
+
+## 5. Panduan Deploy & Build (Produksi)
+
+Berikut adalah langkah-langkah untuk mendeploy aplikasi ini ke server produksi (VPS, Shared Hosting, atau cPanel):
+
+### A. Build Aset Frontend (Vite)
+Aset CSS/JS harus di-compile untuk produksi agar load web cepat:
+```bash
+npm run build
+```
+*Hasil build akan tersimpan di folder `public/build`.*
+
+### B. Setup Server & Web Server
+* **PHP Version**: Minimal PHP 8.1.
+* **Document Root**: Arahkan domain/subdomain ke folder `/public` (bukan root proyek).
+* **Ekstensi PHP Wajib**: `BCMath`, `Ctype`, `Fileinfo`, `JSON`, `Mbstring`, `OpenSSL`, `PDO`, `Tokenizer`, `XML`.
+
+### C. Langkah Deploy di Server (VPS/SSH)
+1. **Clone Proyek** ke server.
+2. **Install Composer** (lewati paket development):
+   ```bash
+   composer install --no-dev --optimize-autoloader
+   ```
+3. **Setup `.env` Produksi**:
+   * Ubah `APP_ENV=production`
+   * Ubah `APP_DEBUG=false`
+   * Generate key jika belum ada: `php artisan key:generate`
+   * Masukkan detail DB produksi.
+4. **Migrasi Database**:
+   ```bash
+   php artisan migrate --force
+   ```
+5. **Hubungkan Folder Storage** (Penting untuk bukti surat):
+   ```bash
+   php artisan storage:link
+   ```
+6. **Optimasi Cache Laravel**:
+   ```bash
+   php artisan config:cache
+   ```
+
+### D. Khusus Shared Hosting (InfinityFree / Hostinger tanpa SSH)
+Karena InfinityFree **tidak memiliki akses SSH/Terminal**, proses build dan composer harus disiapkan dari komputer lokal sebelum diunggah:
+
+1. **Siapkan File di Lokal (PC Anda)**:
+   * Jalankan build frontend: `npm run build`
+   * Hapus folder `vendor` lalu install dependencies produksi saja:
+     ```bash
+     composer install --no-dev --optimize-autoloader
+     ```
+2. **Folder yang Wajib Diunggah ke File Manager**:
+   * `app/`
+   * `bootstrap/`
+   * `config/`
+   * `database/`
+   * `public/` (pastikan folder `public/build` hasil build ada)
+   * `resources/`
+   * `routes/`
+   * `vendor/` (wajib karena di server gratisan tidak bisa install composer)
+   * `.env` (isi disesuaikan DB server)
+   * `artisan`
+   * `composer.json`
+
+3. **Folder yang TIDAK BOLEH Diunggah (Hapus/Skip)**:
+   * `node_modules/` (sangat besar dan tidak digunakan di server)
+   * `.git/` (riwayat git)
+
+4. **Penyesuaian Struktur Folder InfinityFree (htdocs)**:
+   InfinityFree mengarahkan domain utama ke folder `/htdocs`. Agar Laravel berjalan aman tanpa mengekspos file sistem:
+   * **Cara Paling Mudah (.htaccess)**: Upload seluruh folder & file di atas ke dalam folder `/htdocs`. Lalu buat file `.htaccess` di dalam root `/htdocs` dengan isi:
+     ```apache
+     <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteRule ^(.*)$ public/$1 [L]
+     </IfModule>
+     ```
+    * **Alternatif (Pecah Folder)** (Sangat Direkomendasikan untuk Keamanan):
+      1. Bikin folder baru sejajar dengan `htdocs` di File Manager (misal dinamakan `laravel-core`).
+      2. Upload seluruh file & folder Laravel (kecuali folder `public`) ke dalam folder `laravel-core` tersebut.
+      3. Upload isi dari folder `public` lokal (seperti `index.php`, `.htaccess`, `favicon.ico`, folder `build`, dll) langsung ke dalam folder `htdocs`.
+      4. Buka file `/htdocs/index.php` di File Manager hosting, ubah baris berikut agar mengarah ke folder `laravel-core`:
+         ```php
+         // Baris 24 (atau di sekitar autoload):
+         // Cari:
+         require __DIR__.'/../vendor/autoload.php';
+         // Ubah jadi:
+         require __DIR__.'/../laravel-core/vendor/autoload.php';
+
+         // Baris 38 (atau di sekitar bootstrap):
+         // Cari:
+         $app = require_once __DIR__.'/../bootstrap/app.php';
+         // Ubah jadi:
+         $app = require_once __DIR__.'/../laravel-core/bootstrap/app.php';
+         ```
+      5. Buka `/laravel-core/app/Providers/AppServiceProvider.php`, tambahkan kode ini di dalam method `register` agar path asset (Vite/Mix) tetap mengarah ke `/htdocs` (sebagai public path baru):
+         ```php
+         $this->app->bind('path.public', function() {
+             return base_path() . '/../htdocs';
+         });
+         ```
+
+### E. Setup Database di InfinityFree (Tanpa Terminal)
+Karena di InfinityFree **tidak bisa menjalankan `php artisan migrate`**, ikuti langkah ini:
+
+1. **Eksport DB Lokal**:
+   * Jalankan seeder di lokal PC dulu agar data terisi: `php artisan migrate:fresh --seed`
+   * Buka **phpMyAdmin** lokal (`localhost/phpmyadmin`).
+   * Pilih database proyek absensi ini, klik menu **Export**, lalu unduh file `.sql` nya.
+2. **Buat DB Baru di Hosting**:
+   * Masuk ke Control Panel InfinityFree.
+   * Pilih menu **MySQL Databases**, buat database baru.
+   * Catat: **DB_HOST**, **DB_NAME**, **DB_USER**, dan **DB_PASSWORD** dari panel.
+3. **Import SQL**:
+   * Buka **phpMyAdmin** di panel InfinityFree.
+   * Pilih database baru Anda, masuk menu **Import**, lalu upload file `.sql` dari PC tadi.
+4. **Hubungkan `.env`**:
+   * Buka file `.env` di hosting, ganti konfigurasi database sesuai detail dari InfinityFree:
+     ```env
+     DB_CONNECTION=mysql
+     DB_HOST=sqlxxx.infinityfree.com  <-- Lihat di panel
+     DB_PORT=3306
+     DB_DATABASE=if0_xxxxx_xxx        <-- Lihat di panel
+     DB_USERNAME=if0_xxxxx            <-- Lihat di panel
+     DB_PASSWORD=xxxxxxxxxx
+     ```

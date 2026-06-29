@@ -167,6 +167,8 @@ class IsiPresensi extends Page
             return;
         }
 
+        $upsertData = [];
+
         foreach ($this->siswaData as $siswaId => $data) {
             if ($data['is_locked']) {
                 continue;
@@ -193,19 +195,25 @@ class IsiPresensi extends Page
                 $buktiSuratPath = null;
             }
 
-            Presensi::updateOrCreate(
-                [
-                    'siswa_id' => $siswaId,
-                    'jadwal_id' => $this->jadwal->id,
-                    'tanggal' => $this->tanggal,
-                ],
-                [
-                    'status' => $data['status'],
-                    'catatan' => $data['status'] === 'D' ? $data['catatan'] : null,
-                    'menit_terlambat' => $data['status'] === 'T' ? $data['menit_terlambat'] : 0,
-                    'bukti_surat' => $buktiSuratPath,
-                    'diabsen_oleh' => Auth::id(),
-                ]
+            $upsertData[] = [
+                'siswa_id' => $siswaId,
+                'jadwal_id' => $this->jadwal->id,
+                'tanggal' => $this->tanggal,
+                'status' => $data['status'],
+                'catatan' => $data['status'] === 'D' ? $data['catatan'] : null,
+                'menit_terlambat' => $data['status'] === 'T' ? $data['menit_terlambat'] : 0,
+                'bukti_surat' => $buktiSuratPath,
+                'diabsen_oleh' => Auth::id(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        if (!empty($upsertData)) {
+            Presensi::upsert(
+                $upsertData,
+                ['siswa_id', 'jadwal_id', 'tanggal'],
+                ['status', 'catatan', 'menit_terlambat', 'bukti_surat', 'diabsen_oleh', 'updated_at']
             );
         }
 
@@ -216,5 +224,22 @@ class IsiPresensi extends Page
             ->send();
 
         return redirect('/dashboard');
+    }
+
+    public function hapusBuktiSurat(int $siswaId): void
+    {
+        if (isset($this->buktiSuratUpload[$siswaId])) {
+            unset($this->buktiSuratUpload[$siswaId]);
+        }
+
+        if (isset($this->siswaData[$siswaId])) {
+            $this->siswaData[$siswaId]['bukti_surat_existing'] = null;
+        }
+
+        Notification::make()
+            ->title('Bukti surat ditandai untuk dihapus')
+            ->body('Klik "Simpan Presensi" untuk menerapkan perubahan.')
+            ->warning()
+            ->send();
     }
 }
