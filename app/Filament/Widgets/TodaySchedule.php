@@ -130,12 +130,6 @@ class TodaySchedule extends BaseWidget
                 ->orWhereIn('id', $substitusiIds);
         });
 
-        $schedulesSubstitutedToOthers = SubstitusiJadwal::where('tanggal', $this->selectedDate)
-            ->where('guru_pengganti_id', '!=', $userId)
-            ->pluck('jadwal_id');
-
-        $query->whereNotIn('id', $schedulesSubstitutedToOthers);
-
         // Cache widget-level state for closures
         $isLibur = $this->isLibur;
         $isPast = $this->isPast;

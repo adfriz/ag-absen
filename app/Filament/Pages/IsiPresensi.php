@@ -8,6 +8,7 @@ use App\Models\Siswa;
 use App\Models\Presensi;
 use App\Models\SubstitusiJadwal;
 use App\Models\HariLibur;
+use App\Models\IzinGuru;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 use Filament\Notifications\Notification;
@@ -42,6 +43,7 @@ class IsiPresensi extends Page
     public $belumWaktunya = false;
     public $isSubstitute = false;
     public $isReadOnly = false;
+    public $namaGuruPengganti = '';
     public $savedMessage = '';
 
     public function mount(Jadwal $jadwal): void
@@ -68,6 +70,15 @@ class IsiPresensi extends Page
             ->exists();
 
         $this->isReadOnly = $isOriginalTeacher && !$this->isSubstitute && $izinAsliHariIni;
+
+        // Cari guru pengganti jika ada substitusi
+        $substitusi = SubstitusiJadwal::where('jadwal_id', $jadwal->id)
+            ->where('tanggal', $this->tanggal)
+            ->first();
+
+        if ($substitusi) {
+            $this->namaGuruPengganti = $substitusi->substituteTeacher?->name ?? 'Guru Pengganti';
+        }
 
         // 2. Validasi Hari Libur
         $libur = HariLibur::where('tanggal', $this->tanggal)->first();

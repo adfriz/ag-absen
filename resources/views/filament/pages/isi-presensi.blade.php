@@ -8,7 +8,14 @@
     @elseif($isReadOnly)
     <div class="p-4 bg-info-500/10 border border-info-500/20 rounded-xl text-info-600 dark:text-info-400">
         <h3 class="text-sm font-bold">Mode Lihat (Read-Only)</h3>
-        <p class="text-xs mt-1">Anda terdata izin hari ini. Pengisian atau perubahan absensi dinonaktifkan.</p>
+        <p class="text-xs mt-1">
+            Anda terdata izin hari ini. Pengisian atau perubahan absensi kelas <strong>{{ $jadwal->classroom->nama }}</strong> untuk mata pelajaran <strong>{{ $jadwal->mataPelajaran->nama }}</strong> dinonaktifkan.
+            @if($namaGuruPengganti)
+                Mata pelajaran ini digantikan oleh <strong>{{ $namaGuruPengganti }}</strong>.
+            @else
+                Belum ada guru pengganti yang ditunjuk untuk jadwal ini.
+            @endif
+        </p>
     </div>
     @elseif($belumWaktunya)
     <div class="p-4 bg-warning-500/10 border border-warning-500/20 rounded-xl text-warning-600 dark:text-warning-400">
