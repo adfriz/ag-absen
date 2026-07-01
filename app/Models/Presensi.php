@@ -23,6 +23,21 @@ class Presensi extends Model
         'diabsen_oleh',
     ];
 
+    protected static function booted(): void
+    {
+        static::updating(function (self $presensi) {
+            if ($presensi->isDirty('bukti_surat') && $presensi->getOriginal('bukti_surat')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($presensi->getOriginal('bukti_surat'));
+            }
+        });
+
+        static::deleting(function (self $presensi) {
+            if ($presensi->bukti_surat) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($presensi->bukti_surat);
+            }
+        });
+    }
+
     /**
      * Relasi ke Siswa
      */

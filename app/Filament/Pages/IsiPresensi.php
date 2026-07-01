@@ -41,6 +41,7 @@ class IsiPresensi extends Page
     public $namaLibur = '';
     public $belumWaktunya = false;
     public $isSubstitute = false;
+    public $isReadOnly = false;
     public $savedMessage = '';
 
     public function mount(Jadwal $jadwal): void
@@ -58,6 +59,15 @@ class IsiPresensi extends Page
         if (!$isOriginalTeacher && !$this->isSubstitute) {
             abort(403, 'Anda tidak memiliki hak akses untuk mengabsen kelas ini.');
         }
+
+        // Cek jika guru asli sedang izin hari ini
+        $izinAsliHariIni = IzinGuru::where('user_id', $jadwal->user_id)
+            ->where('status', 'Disetujui')
+            ->where('tanggal_mulai', '<=', $this->tanggal)
+            ->where('tanggal_selesai', '>=', $this->tanggal)
+            ->exists();
+
+        $this->isReadOnly = $isOriginalTeacher && !$this->isSubstitute && $izinAsliHariIni;
 
         // 2. Validasi Hari Libur
         $libur = HariLibur::where('tanggal', $this->tanggal)->first();
@@ -95,7 +105,9 @@ class IsiPresensi extends Page
             // Logika Kunci H+3 untuk edit presensi
             $isLocked = false;
             
-            if ($presensi) {
+            if ($this->isReadOnly) {
+                $isLocked = true;
+            } elseif ($presensi) {
                 $selisihHari = Carbon::today()->diffInDays(Carbon::parse($presensi->tanggal), false);
                 
                 if ($selisihHari > 0) { // Jika dibuka di hari berikutnya (H+1 atau lebih)
@@ -157,6 +169,11 @@ class IsiPresensi extends Page
 
     public function simpanPresensi()
     {
+        if ($this->isReadOnly) {
+            session()->flash('error', 'Anda sedang izin hari ini. Pengisian absensi dinonaktifkan.');
+            return;
+        }
+
         if ($this->hariIniLibur) {
             session()->flash('error', 'Tidak dapat menyimpan absensi pada hari libur.');
             return;
@@ -166,6 +183,13 @@ class IsiPresensi extends Page
             session()->flash('error', 'Waktu pelajaran belum dimulai.');
             return;
         }
+
+        // Ambil presensi lama untuk menghapus berkas bukti_surat yang lama jika diganti atau dihapus
+        $existingPresensi = Presensi::where('jadwal_id', $this->jadwal->id)
+            ->where('tanggal', $this->tanggal)
+            ->whereIn('siswa_id', array_keys($this->siswaData))
+            ->get()
+            ->keyBy('siswa_id');
 
         $upsertData = [];
 
@@ -193,6 +217,12 @@ class IsiPresensi extends Page
 
             if (!in_array($data['status'], ['S', 'I'])) {
                 $buktiSuratPath = null;
+            }
+
+            // Hapus berkas fisik yang lama dari server jika path-nya berubah atau dihapus
+            $oldBuktiSurat = $existingPresensi->get($siswaId)?->bukti_surat;
+            if ($oldBuktiSurat && $oldBuktiSurat !== $buktiSuratPath) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($oldBuktiSurat);
             }
 
             $upsertData[] = [

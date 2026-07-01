@@ -34,6 +34,18 @@ class IzinGuru extends Model
                     ->sendToDatabase($admin);
             }
         });
+
+        static::updating(function (self $izinGuru) {
+            if ($izinGuru->isDirty('bukti_surat') && $izinGuru->getOriginal('bukti_surat')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($izinGuru->getOriginal('bukti_surat'));
+            }
+        });
+
+        static::deleting(function (self $izinGuru) {
+            if ($izinGuru->bukti_surat) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($izinGuru->bukti_surat);
+            }
+        });
     }
 
     protected $fillable = [

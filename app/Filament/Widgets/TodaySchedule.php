@@ -125,20 +125,16 @@ class TodaySchedule extends BaseWidget
                 }
             ]);
 
-        if ($izinSayaHariIni) {
-            $query->whereIn('id', $substitusiIds);
-        } else {
-            $query->where(function ($q) use ($substitusiIds, $userId) {
-                $q->where('user_id', $userId)
-                    ->orWhereIn('id', $substitusiIds);
-            });
+        $query->where(function ($q) use ($substitusiIds, $userId) {
+            $q->where('user_id', $userId)
+                ->orWhereIn('id', $substitusiIds);
+        });
 
-            $schedulesSubstitutedToOthers = SubstitusiJadwal::where('tanggal', $this->selectedDate)
-                ->where('guru_pengganti_id', '!=', $userId)
-                ->pluck('jadwal_id');
+        $schedulesSubstitutedToOthers = SubstitusiJadwal::where('tanggal', $this->selectedDate)
+            ->where('guru_pengganti_id', '!=', $userId)
+            ->pluck('jadwal_id');
 
-            $query->whereNotIn('id', $schedulesSubstitutedToOthers);
-        }
+        $query->whereNotIn('id', $schedulesSubstitutedToOthers);
 
         // Cache widget-level state for closures
         $isLibur = $this->isLibur;
